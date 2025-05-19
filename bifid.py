@@ -4,24 +4,26 @@ import random
 def printTable(table):
     for i in range(len(table)):
         print(f"{table[i]}")
-  
+        
 def get_char(text:str) -> array.array:
     charArr = []
     for i in range(len(text)):
         charArr.append(text[i].upper())
-    
     return charArr
+
 
 def text_to_positions(text:str, table:array.array) -> array.array:
     text = get_char(text)
     positions = []
     for i in range(len(text)):
-        if text[i].isalpha() or text[i].isnumeric():
+        if text[i].isalnum():
             for j in range(len(table)):           
                 if text[i] in table[j]:
                     positions.append([j , table[j].index(text[i])])
                      
     return positions
+
+
 
 def positions_to_text(text:str, positions:array.array, table:array.array) -> str:
     text_arr = []
@@ -29,10 +31,12 @@ def positions_to_text(text:str, positions:array.array, table:array.array) -> str
         text_arr.append(table[positions[i][0]][positions[i][1]])
 
     for i in range(len(text)):
-        if not (text[i].isalpha() or text[i].isnumeric()):
+        if not text[i].isalnum():
             text_arr.insert(i,text[i])
             
     return "".join(text_arr)
+        
+
 
 def bifid_encrypt(ptext:str, table:array.array) -> str:
     positions = text_to_positions(ptext, table)
@@ -48,6 +52,7 @@ def bifid_encrypt(ptext:str, table:array.array) -> str:
         enc_part2.append([enc_part1[i],enc_part1[i+1]])
     
     return positions_to_text(ptext, enc_part2,table)
+    
 
 def bifid_decrypt(ctext:str, table:array.array) -> str:
     positions = text_to_positions(ctext, table)
@@ -62,6 +67,15 @@ def bifid_decrypt(ctext:str, table:array.array) -> str:
         ptext_positions.append([ij_positions[i],ij_positions[i+len(positions)]])
     
     return positions_to_text(ctext,ptext_positions,table)
+
+classical_table = [
+    ["A" , "B" , "C" , "D" , "E" , "F"],
+    ["G" , "H" , "I" , "J" , "K" , "L"],
+    ["M" , "N" , "O" , "P" , "Q" , "R"],
+    ["S" , "T" , "U" , "V" , "W" , "X"],
+    ["Y" , "Z" , "0" , "1" , "2" , "3"],
+    ["4" , "5" , "6" , "7" , "8" , "9"]
+]
  
 def shuffle_table(table:array.array) -> array.array:
     shuffled_alphabet = []
@@ -79,15 +93,8 @@ def shuffle_table(table:array.array) -> array.array:
             row.append(shuffled_alphabet[6*i+j]) #0,..,5 then 6,..,11 ...
         shuffled_table.append(row)
     
+    
     return shuffled_table
-  
-classical_table = [
-    ["A" , "B" , "C" , "D" , "E" , "F"],
-    ["G" , "H" , "I" , "J" , "K" , "L"],
-    ["M" , "N" , "O" , "P" , "Q" , "R"],
-    ["S" , "T" , "U" , "V" , "W" , "X"],
-    ["Y" , "Z" , "0" , "1" , "2" , "3"],
-    ["4" , "5" , "6" , "7" , "8" , "9"]
-]
+
 
 
